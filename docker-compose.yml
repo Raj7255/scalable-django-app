@@ -1,0 +1,21 @@
+services:
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+
+  scalable-django-app:
+    build:
+      context: .
+    container_name: scalable-django-app
+    depends_on:
+      - postgres-db
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@postgres-db:5432/mydatabase
+    ports:
+      - "8000:8000"
